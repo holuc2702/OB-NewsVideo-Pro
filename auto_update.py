@@ -41,7 +41,7 @@ LogFn = Callable[[str], None]
 
 # --- Configure your GitHub repo here ---
 # Account that owns the Releases (must match the token / gh login used to publish)
-GITHUB_OWNER = "holuc272"
+GITHUB_OWNER = "holuc2702"
 GITHUB_REPO = "OB-NewsVideo-Pro"
 # Must match the version you put on the Release tag (with or without leading v)
 APP_VERSION = "1.1.0"

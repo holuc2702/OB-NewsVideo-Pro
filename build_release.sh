@@ -134,10 +134,24 @@ if [[ "$SKIP_PUSH" -eq 0 ]]; then
   fi
 
   echo "==> Push source -> origin main"
-  if git push -u origin main; then
+  # Prefer GH_TOKEN so we don't hit wrong Keychain account (holuc2702 vs holuc272)
+  PUSH_OK=0
+  if [[ -n "${GH_TOKEN:-}" ]]; then
+    git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git"
+    if git push -u origin main; then
+      PUSH_OK=1
+    fi
+    git remote set-url origin "https://github.com/${REPO}.git"
+  else
+    if git push -u origin main; then
+      PUSH_OK=1
+    fi
+  fi
+  if [[ "$PUSH_OK" -eq 1 ]]; then
     echo "    Push OK"
   else
-    echo "WARN: git push failed. Continuing with Release upload..."
+    echo "WARN: git push failed. Repo may need an initial commit via GH_TOKEN."
+    echo "      Continuing with Release upload if repo already has commits..."
   fi
 fi
 
